@@ -1,1 +1,6 @@
-10
+startTime=10:0:0
+subTime=0
+resubTime=0
+giftedsubTime=0
+bitsTime=0
+raidTime=0

@@ -1,4 +1,5 @@
 package classes;
+import java.io.BufferedWriter;
 //Imports
 //io
 import java.io.File;
@@ -13,15 +14,19 @@ public class TimerBot extends TwitchBot{
 	//InstanceV Variables
 	//Ints
 	private int subTime;
-	//Boolean
-	private static boolean debug = true;
+	private int resubTime;
+	private int	giftedsubTime;
+	private int	bitsTime;
+	private int	raidTime;
+	//Strings
+	private String addCommandFormat;
+	private String subCommandFormat;
+	private String addTimeCommand;
+	private String subTimeCommand;
+	
 	//Constructor
 	public TimerBot () {
-		this.setUsername("Dragonslayer7516");
-		this.setOauth_Key("oauth:77b92nac7w69l4wlott8xv11x3uxzo");
-		this.setClientID("wjy72kls6t4hrhf5vzt8tz35xsi2u6");
-		TimeClass time = new TimeClass();
-		subTime = time.getSubTime();
+		updateInfo();
 	}
 	//Methods
 	//Overrides
@@ -29,8 +34,6 @@ public class TimerBot extends TwitchBot{
 	public void onMessage(User user, Channel channel, String message) {
 		
 	}
-	
-	
 	
 	@Override
 	public void onCommand(User user, Channel channel, String message){
@@ -40,13 +43,13 @@ public class TimerBot extends TwitchBot{
 	}
 	
 	@Override
-	public void onSub(User user, Channel channel, String message) {
-		debug("Found IT");
-		command("subscribertime", channel, user);
+	public void onSub(User user, Channel channel, String message, String type) {
+		command(type, channel, user);
 	}
 	
 	@Override
 	public void onBits(User user, Channel channel, String message, String bits) {
+		command("bits", channel, user);
 	}
 	
 	@Override
@@ -61,58 +64,170 @@ public class TimerBot extends TwitchBot{
 	
 	//Private
 	/**
-	 * Easy debug method to output a string to console if debuging is turned on.
-	 * 
-	 * @param message is the message that is printed to console
+	 * Updates info for the bot
 	 */
-	@SuppressWarnings("unused")
-	private static void debug(String message) {
-		if(debug) {
-			System.out.println(message);}
+	private void updateInfo() {
+		FileClass info = new FileClass();
+		info.readInSettings();
+		this.setUsername(info.getBotName());
+		this.setOauth_Key(info.getBotOAuth());
+		this.setClientID("wjy72kls6t4hrhf5vzt8tz35xsi2u6");
+		addTimeCommand = info.getAddTimeCommand();
+		subTimeCommand = info.getSubTimeCommand();
+		addCommandFormat = info.getAddTimeFormat();
+		subCommandFormat = info.getSubTimeFormat();
+		TimeClass time = new TimeClass();
+		subTime = time.getSubTime();
+		resubTime = time.getResubTime();
+		giftedsubTime = time.getGiftedsubTime();
+		bitsTime = time.getBitsTime();
+		raidTime = time.getRaidTime();
 	}
 	
+	/**
+	 * Reads in a message and checks what to do with it
+	 * @param message The message or command or type to execute
+	 * @param channel The channel that is currently connected to
+	 * @param user The user that sent the message or command or event
+	 */
+	@SuppressWarnings("resource")
 	private void command(String message, Channel channel, User user) {
+		updateInfo();
 		File update = new File("updates.txt");
 		FileWriter write = null;
 		try {
 			write = new FileWriter(update, true);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			debug.debug("TimerBotCommand:" + "There was an error creating the FileWriter");
+			debug.debug(e1.getStackTrace().toString());
 			return;
 		}
-		
+		BufferedWriter writeBuff = new BufferedWriter(write);
 		String[] split = message.split(" ");
-		if(split[0].contains("addtime") && split.length == 3) {
+		//Runs if the command is equal to the addTimeCommand
+		if(split[0].contains(addTimeCommand) && split.length == 3) {
 			try {
-				add(split[2], Integer.parseInt(split[1]), channel);
-				write.write("Command" + ":" + user + ":" + Integer.parseInt(split[1]) + "\n");
+				String[] format = addCommandFormat.split(" ");
+				if(format[0].equals("$TA%") && Integer.parseInt(split[1])>0) {
+					add(split[2], Integer.parseInt(split[1]), channel);
+					writeBuff.write("Add Command" + ":" + user + ":" + Integer.parseInt(split[1]));
+					writeBuff.newLine();
+				} else if(format[1].equals("$TA%") && Integer.parseInt(split[2])>0) {
+					add(split[1], Integer.parseInt(split[2]), channel);
+					writeBuff.write("Add Command" + ":" + user + ":" + Integer.parseInt(split[2]));
+					writeBuff.newLine();
+				}
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommand:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommand:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
 				return;
 			}
-		} else if(split[0].contains("subtime")  && split.length == 3) {
+			//Runs if the command is equal to the subTimeCommand
+		} else if(split[0].contains(subTimeCommand)  && split.length == 3) {
 			try {
-				sub(split[2], Integer.parseInt(split[1]), channel);
-				write.write("Command" + ":" + user + ":" + Integer.parseInt(split[1]) + "\n");
+				String[] format = subCommandFormat.split(" ");
+				if(format[0].equals("$TA%") && Integer.parseInt(split[1])>0) {
+					sub(split[2], Integer.parseInt(split[1]), channel);
+					writeBuff.write("Subtract Command" + ":" + user + ":" + Integer.parseInt(split[1]));
+					writeBuff.newLine();
+				} else if(format[1].equals("$TA%") && Integer.parseInt(split[2])>0) {
+					sub(split[1], Integer.parseInt(split[2]), channel);
+					writeBuff.write("Subtract Command" + ":" + user + ":" + Integer.parseInt(split[2]));
+					writeBuff.newLine();
+				}
+				
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommand:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommand:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
 				return;
 			}
-		} else if(split[0].contains("subscribertime")  && split.length == 1) {
+			//Runs if the command is toggleDebug
+		} else if(split[0].contains("toggleDebug")  && split.length == 1) {
+			debug.debugToggle();
+			//Runs if the command is checkDebug
+		} else if(split[0].contains("checkDebug")  && split.length == 1) {
+			this.sendMessage("Debug is currently set to " + debug.debugOn(), channel);
+			//Runs if the type is a sub
+		} else if(split[0].contains("sub")  && split.length == 1) {
 			try {
 				add("minutes", subTime, channel);
-				write.write("Sub" + ":" + user + ":" + subTime + "\n");
+				writeBuff.write("Sub" + ":" + user + ":" + subTime);
+				writeBuff.newLine();
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommandSub:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				debug.debug("TimerBotCommandSub:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
+				return;
+			}
+			//Runs if the type is a resub
+		} else if(split[0].contains("resub")  && split.length == 1) {
+			try {
+				add("minutes", resubTime, channel);
+				writeBuff.write("resub" + ":" + user + ":" + resubTime);
+				writeBuff.newLine();
+			} catch (NumberFormatException e) {
+				debug.debug("TimerBotCommandResub:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
+				return;
+			} catch (IOException e) {
+				debug.debug("TimerBotCommandResub:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
+				return;
+			}
+			//Runs if the type is a subgift
+		} else if(split[0].contains("subgift")  && split.length == 1) {
+			try {
+				add("minutes", giftedsubTime, channel);
+				writeBuff.write("subgift" + ":" + user + ":" + giftedsubTime);
+				writeBuff.newLine();
+			} catch (NumberFormatException e) {
+				debug.debug("TimerBotCommandSubGift:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
+				return;
+			} catch (IOException e) {
+				debug.debug("TimerBotCommandSubGift:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
+				return;
+			}
+			//Runs if the type is a raid
+		} else if(split[0].contains("raid")  && split.length == 1) {
+			try {
+				add("minutes", raidTime, channel);
+				writeBuff.write("raid" + ":" + user + ":" + raidTime);
+				writeBuff.newLine();
+			} catch (NumberFormatException e) {
+				debug.debug("TimerBotCommand:Raid" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
+				return;
+			} catch (IOException e) {
+				debug.debug("TimerBotCommandRaid:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
+				return;
+			}
+			//Runs if the type is bits
+		} else if(split[0].contains("bits")  && split.length == 1) {
+			try {
+				add("minutes", bitsTime, channel);
+				writeBuff.write("bits" + ":" + user + ":" + bitsTime);
+				writeBuff.newLine();
+			} catch (NumberFormatException e) {
+				debug.debug("TimerBotCommandBits:" + "There was not a number where there should of been, " + message);
+				debug.debug(e.getStackTrace().toString());
+				return;
+			} catch (IOException e) {
+				debug.debug("TimerBotCommandBits:" + "There was an error creating the BufferedWriter");
+				debug.debug(e.getStackTrace().toString());
 				return;
 			}
 		} else {
@@ -120,10 +235,11 @@ public class TimerBot extends TwitchBot{
 		}
 		if(write != null) {
 			try {
+				writeBuff.close();
 				write.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				debug.debug("TimerBotCommandClose:" + "There was an error closing Writers");
+				debug.debug(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -142,8 +258,8 @@ public class TimerBot extends TwitchBot{
 			write.close();
 			//sendMessage("Adding time now", channel);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			debug.debug("TimerBotCommandClose:" + "There was an error creating writers");
+			debug.debug(e.getStackTrace().toString());
 		}
 	}
 	
@@ -161,8 +277,8 @@ public class TimerBot extends TwitchBot{
 			write.close();
 			//sendMessage("sub time now", channel);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			debug.debug("TimerBotCommandClose:" + "There was an error creating writers");
+			debug.debug(e.getStackTrace().toString());
 		}
 	}
 }

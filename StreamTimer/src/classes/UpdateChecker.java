@@ -16,11 +16,11 @@ import javax.swing.JOptionPane;
 public class UpdateChecker {
 	//Instance Variables
 	private final static String USER_AGENT = "Mozilla/5.0";
-	private final static String VERSION = "Version 0.4";
+	private final static String VERSION = "Version 1";
 	
 	//Methods
 	public static void updateCheckStandalone() throws Exception {
-		String url = "https://github.com/derrickbush1999/TestScaler/blob/master/README.md";
+		String url = "https://raw.githubusercontent.com/derrickbush1999/StreamTimer/master/README.md";
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -43,17 +43,17 @@ public class UpdateChecker {
 			if(confirmation == JOptionPane.YES_OPTION) {
 				try {
 					  Desktop desktop = java.awt.Desktop.getDesktop();
-					  URI oURL = new URI("https://github.com/derrickbush1999/TestScaler");
+					  URI oURL = new URI("https://github.com/derrickbush1999/StreamTimer");
 					  desktop.browse(oURL);
 					} catch (Exception e) {
-					  e.printStackTrace();
+						debug.debug("UpdateCheckerStandalone:" + "There was an error getting the users desktop");
 					}
 			}
 		}
 	}
 	
 	public static int updateCheckReturn() throws Exception {
-		String url = "https://github.com/derrickbush1999/TestScaler/blob/master/README.md";
+		String url = "https://raw.githubusercontent.com/derrickbush1999/StreamTimer/master/README.md";
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

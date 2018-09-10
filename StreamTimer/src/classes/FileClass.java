@@ -1,89 +1,33 @@
 package classes;
 
 //Imports
+//IO
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+//Util
 import java.util.Scanner;
-
+//Swing
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 public class FileClass {
-	// Instance Variables
-	private String dateFormat;
-	private String fileNameFormat;
-	private File saveLocation;
-	private File backupLocation;
+	//Instance Variables
+	//String
+	private String BotName;
+	private String BotOAuth;
+	private String TwitchChannel;
+	private String AddTimeCommand;
+	private String SubTimeCommand;
+	private String AddTimeFormat;
+	private String SubTimeFormat;
 
 	// Constructors
-	public FileClass() {
-	}
-
-	// Getters
-	/**
-	 * @return the dateFormat
-	 */
-	public String getDateFormat() {
-		return dateFormat;
-	}
-
-	/**
-	 * @return the fileNameFormat
-	 */
-	public String getFileNameFormat() {
-		return fileNameFormat;
-	}
-
-	/**
-	 * @return the saveLocation
-	 */
-	public File getSaveLocation() {
-		return saveLocation;
-	}
-
-	/**
-	 * @return the backupLocation
-	 */
-	public File getBackupLocation() {
-		return backupLocation;
-	}
-
-	// Setters
-	/**
-	 * @param dateFormat
-	 *            the dateFormat to set
-	 */
-	public void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
-	/**
-	 * @param fileNameFormat
-	 *            the fileNameFormat to set
-	 */
-	public void setFileNameFormat(String fileNameFormat) {
-		this.fileNameFormat = fileNameFormat;
-	}
-
-	/**
-	 * @param saveLocation
-	 *            the saveLocation to set
-	 */
-	public void setSaveLocation(File saveLocation) {
-		this.saveLocation = saveLocation;
-	}
-
-	/**
-	 * @param backupLocation
-	 *            the backupLocation to set
-	 */
-	public void setBackupLocation(File backupLocation) {
-		this.backupLocation = backupLocation;
-	}
-
+	public FileClass() {}
+	
 	// Methods
+	//Public
 	/**
 	 * Creates popup menu to allow user to select a Directory to save files to.
 	 * 
@@ -111,6 +55,11 @@ public class FileClass {
 		return chooser;
 	}
 	
+	/**
+	 * Creates a popup menu allowing the user to select a file to load
+	 * @param windowTitle Title for the popup window
+	 * @return returns the file selected
+	 */
 	public JFileChooser selectFile(String windowTitle) {
 		/*
 		 * Fragment from http://www.rgagnon.com/javadetails/java-0370.html
@@ -129,6 +78,11 @@ public class FileClass {
 		return chooser;
 	}
 	
+	/**
+	 * Creates a popup window allowing the user to save a file
+	 * @param windowTitle Title for the popup window
+	 * @return returns the saved file
+	 */
 	public JFileChooser saveFile(String windowTitle) {
 		/*
 		 * Fragment from http://www.rgagnon.com/javadetails/java-0370.html
@@ -149,7 +103,7 @@ public class FileClass {
 	}
 	
 	/**
-	 * Checks to make sure that the given date format is in a correct format and
+	 * Checks to make sure that the given format is valid and
 	 * dose not contain any bad characters
 	 * 
 	 * @param format
@@ -157,104 +111,44 @@ public class FileClass {
 	 * @return Returns a string with either the error or that everything is good and
 	 *         clear to pass onto the next area
 	 */
-	public String checkDateFormat(String format) {
+	public String checkTimeFormat(String format) {
 		// Creates a copy of the format string to modify
 		String copy = format;
 		// Creates an array that will store any character that is not specified in the
 		// .split method and runs until there is no more specified characters
-		String[] arr = copy.split("[$%YMD_]", 0);
+		String[] arr = copy.split("[$%TA_ ]", 0);
 		// for loop to check if there was any invalid characters and if so returns a
 		// string saying that the format contains an invalid character
 		for (int i = 0; i < arr.length; i++) {
 			// checks if the string at i position is empty or not, and if not returns the
 			// error of invalid charachter
 			if (!arr[i].equals("")) {
-				return "You used an invalid character, please only use the codes and _";
+				debug.debug("FileClassCheckTimeFormat:" + "You used " + arr[i] + " which is an invalid character, please only use the codes and _");
+				return "You used " + arr[i] + " which is an invalid character, please only use the codes and _";
 			}
 		}
 		// Strings to hold the needed format codes to check for in the string
-		String year = "$YYYY%";
-		String month = "$MM%";
-		String date = "$DD%";
+		String timeAmmount = "$TA%";
+		String timeType = "$TT%";
 		// If the string contains the specified string then it will set the respective
 		// string to null
-		if (format.contains("$YYYY%")) {
-			year = null;
+		if (format.contains("$TA%")) {
+			timeAmmount = null;
 		}
 		// If the string contains the specified string then it will set the respective
 		// string to null
-		if (format.contains("$MM%")) {
-			month = null;
-		}
-		// If the string contains the specified string then it will set the respective
-		// string to null
-		if (format.contains("$DD%")) {
-			date = null;
+		if (format.contains("$TT%")) {
+			timeType = null;
 		}
 		// If the format code strings are all null, then the format string is clear and
 		// good to use
-		if (year == null && month == null && date == null) {
+		if (timeAmmount == null && timeType == null) {
 			return "clear";
 			// If one or more is not null, then it returns a error code saying that you
 			// forgot a code and lists what codes are needed.
 		} else {
-			return ("You forgot to include a code, here are the ones that are not present: " + year + " " + month + " "
-					+ date);
-		}
-	}
-
-	/**
-	 * Checks to make sure that the given file name format is in a correct format
-	 * and dose not contain any bad characters
-	 * 
-	 * @param format
-	 *            Passes the string the user gave for the format to check
-	 * @return Returns a string with either the error or that everything is good and
-	 *         clear to pass onto the next area
-	 */
-	public String checkFileNameFormat(String format) {
-		// Creates a copy of the format string to be checked and modified
-		String copy = format;
-		// Creates an array that will store any character that is not specified in the
-		// .split method and runs until there is no more specified characters
-		String[] arr = copy.split("[$%DFCNT-]", 0);
-		// for loop to check if there was any invalid characters and if so returns a
-		// string saying that the format contains an invalid character
-		for (int i = 0; i < arr.length; i++) {
-			// checks if the string at i position is empty or not, and if not returns the
-			// error of invalid charachter
-			if (!arr[i].equals("")) {
-				return "You used an invalid character, please only use the codes and -";
-			}
-		}
-		// Strings to hold the needed format codes to check for in the string
-		String date = "$DF%";
-		String className = "$CN%";
-		String test = "$TN%";
-		// If the string contains the specified string then it will set the respective
-		// string to null
-		if (format.contains("$DF%")) {
-			date = null;
-		}
-		// If the string contains the specified string then it will set the respective
-		// string to null
-		if (format.contains("$CN%")) {
-			className = null;
-		}
-		// If the string contains the specified string then it will set the respective
-		// string to null
-		if (format.contains("$TN%")) {
-			test = null;
-		}
-		// If the format code strings are all null, then the format string is clear and
-		// good to use
-		if (date == null && className == null && test == null) {
-			return "clear";
-			// If one or more is not null, then it returns a error code saying that you
-			// forgot a code and lists what codes are needed.
-		} else {
-			return ("You forgot to include a code, here are the ones that are not present: " + date + " " + className
-					+ " " + test);
+			debug.debug("FileClassCheckTimeFormat:" + "You forgot to include a code, here are the ones that are not present: " + timeAmmount + " " + timeType);
+			return ("You forgot to include a code, here are the ones that are not present: " + timeAmmount + " " + timeType);
 		}
 	}
 
@@ -271,57 +165,116 @@ public class FileClass {
 	 * @param backupLocation
 	 *            String with valid backup location to save to file
 	 */
-	public void saveSettings(String dateFormat, String fileNameFormat, File saveLocation, File backupLocation) {
+	public void saveSettings(String BotName, String BotOAuth, String TwitchChannel, String AddTimeCommand, String SubTimeCommand, String AddTimeFormat, String SubTimeFormat) {
 		// Creates instance of File to create the settings.ini file
-		File settingsFile = new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\settings.ini");
-		// Try loop to make sure that the file gets created if it is not there at the
-		// start
+		
+		File settingsFile = null;
+		// Try loop to make sure that the file gets created if it is not there at the start
 		try {
 			// Creates instance of the FileWriter to write to the settings.ini file
+			settingsFile = new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini");
 			FileWriter writer = new FileWriter(settingsFile);
-			// Writes the date and file format as well as the save and backup location to
-			// the settings.ini file with a blank line at the end
-			writer.write(dateFormat + "\n");
-			writer.write(fileNameFormat + "\n");
-			writer.write(saveLocation.getAbsolutePath() + "\n");
-			writer.write(backupLocation.getAbsolutePath() + "\n");
+			// Writes the needed info to the settings.ini file with a blank line at the end
+			writer.write(BotName + "\n");
+			writer.write(BotOAuth + "\n");
+			writer.write(TwitchChannel + "\n");
+			writer.write(AddTimeCommand + "\n");
+			writer.write(SubTimeCommand + "\n");
+			writer.write(AddTimeFormat + "\n");
+			writer.write(SubTimeFormat + "\n");
 			writer.close();
 			// Catches if the file does not exist
 		} catch (IOException e) {
 			try {
 				// Will try to create the file
+				settingsFile = new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer");
+				settingsFile.mkdir();
 				settingsFile.createNewFile();
 				// If file is created then will run the saveSettings method again
-				saveSettings(dateFormat, fileNameFormat, saveLocation, backupLocation);
+				saveSettings(BotName, BotOAuth, TwitchChannel, AddTimeCommand, SubTimeCommand, AddTimeFormat, SubTimeFormat);
 			} catch (IOException e1) {
 				// Catches if there is any errors for debugging
-				e1.printStackTrace();
+				debug.debug("FileClassSaveSettings:" + System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini");
+				debug.debug(e1.getStackTrace().toString());
 			}
 		}
 	}
-
+	
+	/**
+	 * Reads in settings from settings.ini
+	 */
 	public void readInSettings() {
 		// Creates instance of File to create the settings.ini file
-		File settingsFile = new File("settings.ini");
+		File settingsFile = new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini");
 		// Try loop to make sure that the file gets created if it is not there at the
 		// start
 		try {
 			// Creates instance of the FileWriter to write to the settings.ini file
 			FileReader read = new FileReader(settingsFile);
 			Scanner reader = new Scanner(read);
-			dateFormat = reader.nextLine();
-			fileNameFormat = reader.nextLine();
-			File save = new File(reader.nextLine());
-			saveLocation = save;
-			File backup = new File(reader.nextLine());
-			backupLocation = backup;
+			BotName = reader.nextLine();
+			BotOAuth = reader.nextLine();
+			TwitchChannel = reader.nextLine();
+			AddTimeCommand = reader.nextLine();
+			SubTimeCommand = reader.nextLine();
+			AddTimeFormat = reader.nextLine();
+			SubTimeFormat = reader.nextLine();
 			reader.close();
 			read.close();
 			// Catches if the file does not exist
 		} catch (IOException e) {
-			e.printStackTrace();
+			debug.debug("FileClassReadInSettings:" + "Error creating new file");
+			debug.debug(e.getStackTrace().toString());
 		}
 	}
-	// Create read in method
+		
+	// Getters
+	/**
+	 * @return the botName
+	 */
+	public String getBotName() {
+		return BotName;
+	}
 
+	/**
+	 * @return the botOAuth
+	 */
+	public String getBotOAuth() {
+		return BotOAuth;
+	}
+
+	/**
+	 * @return the twitchChannel
+	 */
+	public String getTwitchChannel() {
+		return TwitchChannel;
+	}
+	
+	/**
+	 * @return the addTimeFormat
+	 */
+	public String getAddTimeFormat() {
+		return AddTimeFormat;
+	}
+
+	/**
+	 * @return the addTimeCommand
+	 */
+	public String getAddTimeCommand() {
+		return AddTimeCommand;
+	}
+
+	/**
+	 * @return the subTimeCommand
+	 */
+	public String getSubTimeCommand() {
+		return SubTimeCommand;
+	}
+
+	/**
+	 * @return the subTimeFormat
+	 */
+	public String getSubTimeFormat() {
+		return SubTimeFormat;
+	}
 }

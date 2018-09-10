@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 //util
@@ -29,8 +28,6 @@ public class StyleClass {
 	private static Color dropdown_text;
 	//Strings
 	private static String style;
-	//Booleans
-	private static boolean debug = true;
 	
 	//Constructors
 	/**
@@ -49,17 +46,6 @@ public class StyleClass {
 	}
 		
 	//Methods
-	//Private
-	/**
-	 * Easy debug method to output a string to console if debuging is turned on.
-	 * 
-	 * @param message is the message that is printed to console
-	 */
-	private static void debug(String message) {
-		if(debug) {
-			System.out.println(message);}
-	}
-	
 	private static void readIn(File file) {
 		File active;
 		if(file == null)
@@ -70,7 +56,8 @@ public class StyleClass {
 		try {
 			activeRead = new Scanner(active);
 		} catch (FileNotFoundException e) {
-			debug("File not found");
+			debug.debug("StyleClassReadIn:" + "The file was not found, " + file);
+			debug.debug(e.getStackTrace().toString());
 		}
 		while(activeRead != null && activeRead.hasNext()) {
 			String hold = activeRead.nextLine();
@@ -123,7 +110,6 @@ public class StyleClass {
 	}
 	
 	public static void changeStyle(String file) throws IOException {
-		debug(file);
 		File change = new File("Styles\\" + file);
 		File active = new File("Styles\\active");
 		FileWriter write = new FileWriter(active);
@@ -225,13 +211,5 @@ public class StyleClass {
 	 */
 	public static Color getDropdown_text() {
 		return dropdown_text;
-	}
-	
-	//Main method
-	public static void main(String args[]) {
-		readIn(null);
-		getStyles();
-		//debug("made it");
-		//debug(window_background.toString());
 	}
 }

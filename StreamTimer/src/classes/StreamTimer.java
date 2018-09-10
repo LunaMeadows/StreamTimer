@@ -1,10 +1,12 @@
 package classes;
 //Imports
+//IO
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+//Util
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -12,16 +14,16 @@ import java.util.concurrent.TimeUnit;
 public class StreamTimer extends Thread{
 	//Instance Variables
 	//Ints
-	private static int hours = 0;
-	private static int minutes = 2;
-	private static int seconds = 5;
+	private static int hours;
+	private static int minutes;
+	private static int seconds;
 	//Strings
 	private static String hh = null;
 	private static String mm = null;
 	private static String ss = null;
 	private static String time = null;
 	//Booleans
-	private static boolean debug = false;
+	private static boolean run = false;
 	
 	//Methods
 	//Public
@@ -30,23 +32,30 @@ public class StreamTimer extends Thread{
 	 * Use .start() instead of .run()
 	 */
 	public void run() {
-		//while hours, minutes, or seconds is greater then 0 run the timer, else stop
+		//while hours, minutes, or seconds is greater then 0 and start is selected on main timer run the timer, else pause
+		TimeClass StartTime = new TimeClass();
+		int[] startTime = StartTime.getStartTime();
+		hours = startTime[0];
+		minutes = startTime[1];
+		seconds = startTime[2];
 		while(true) {
-			command();
-			timeIncerment();
 			formatCheck();
-			//de incermetn seconds if time does not equal 0
-			if(seconds == 0) {
-				debug("Time is up");
-			} else {
-				seconds--;
-			}
-			debug(time);
-			//Trys to sleep for 1 second
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if(run) {
+				command();
+				timeIncerment();
+				formatCheck();
+				//de incermetn seconds if time does not equal 0
+				if(seconds == 0) {
+				} else {
+					seconds--;
+				}
+				//Trys to sleep for 1 second
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					debug.debug("StreamTimerRun:" + "There was an error waiting 1 second");
+					debug.debug(e.getStackTrace().toString());
+				}
 			}
 		}
 	}
@@ -64,31 +73,30 @@ public class StreamTimer extends Thread{
 		return "00:00:00";
 	}
 	
-	//Private
-	/**
-	 * Easy debug method to output a string to console if debuging is turned on.
-	 * 
-	 * @param message is the message that is printed to console
-	 */
-	private static void debug(String message) {
-		if(debug) {
-			System.out.println(message);}
+	public static void setRun(boolean runNew) {
+		run = runNew;
 	}
 	
+	//Private	
 	/**
 	 * Incerments the time left down every second
 	 */
 	private static void timeIncerment() {
-		//If seconds is equal to 0 then subtract 1 from minutes and set seconds to 59
-		if(seconds == 0 && minutes > 0) {
-			minutes--;
-			seconds = 59;
-		}
-		//If minutes is equal to 0 then subtact 1 from hours and set minutes to 59
-		if(minutes == 0 && hours > 0) {
-			hours--;
-			minutes = 59;
-		}
+			if(hours > 0 && minutes == 0 && seconds == 0) {
+				hours--;
+				minutes = 59;
+				seconds = 59;
+			}
+			//If seconds is equal to 0 then subtract 1 from minutes and set seconds to 59
+			if(seconds == 0 && minutes > 0) {
+				minutes--;
+				seconds = 59;
+			}
+			//If minutes is equal to 0 then subtact 1 from hours and set minutes to 59
+			if(minutes == 0 && hours > 0) {
+				hours--;
+				minutes = 59;
+			}
 	}
 	
 	/**
@@ -151,6 +159,8 @@ public class StreamTimer extends Thread{
 		try {
 			input = new Scanner(timer);
 		} catch (FileNotFoundException e1) {
+			debug.debug("StreamTimerCommand:" + "There was an error creating the scanner");
+			debug.debug(e1.getStackTrace().toString());
 			return;
 		}
 		//While the scanner has a new line in timer.txt it will go through and execute all commands from top to bottom
@@ -160,6 +170,8 @@ public class StreamTimer extends Thread{
 				 command = getCommand();
 			} catch (IOException e) {
 				input.close();
+				debug.debug("StreamTimerCommand:" + "There was an error getting the command");
+				debug.debug(e.getStackTrace().toString());
 				return;
 			}
 			if(command != null)
@@ -184,6 +196,8 @@ public class StreamTimer extends Thread{
 		try {
 			hold = input.nextLine();
 		} catch (NoSuchElementException ex) {
+			debug.debug("StreamTimerGetCommand:" + "There was an error creating the scanner");
+			debug.debug(ex.getStackTrace().toString());
 			input.close();
 			return null;
 		}
@@ -226,10 +240,11 @@ public class StreamTimer extends Thread{
 	private static void addTime(String command) {
 		//Splits the string to find out what time type is added
 		String[] split = command.split(" ");
-		debug(command);
 		try {
 			Integer.parseInt(split[2]);
 		} catch (NumberFormatException ex) {
+			debug.debug("StreamTimerAddTime:" + "Was not an int when it should of been, " + command);
+			debug.debug(ex.getStackTrace().toString());
 			return;
 		}
 		if(split[1].equals("seconds")) {
@@ -251,6 +266,8 @@ public class StreamTimer extends Thread{
 		try {
 			Integer.parseInt(split[2]);
 		} catch (NumberFormatException ex) {
+			debug.debug("StreamTimerSubtractTime:" + "Was not an int when it should of been, " + command);
+			debug.debug(ex.getStackTrace().toString());
 			return;
 		}
 		if(split[1].equals("seconds")) {
@@ -259,29 +276,6 @@ public class StreamTimer extends Thread{
 			minutes = (minutes-(Integer.parseInt(split[2])));
 		} else if(split[1].equals("hours")) {
 			hours = (hours-(Integer.parseInt(split[2])));
-		}
-	}
-	
-	//Main/Testing
-	public static void main(String args[]) throws InterruptedException, IOException {
-		//while hours, minutes, or seconds is greater then 0 run the timer, else stop
-		while(true) {
-			command();
-			timeIncerment();
-			formatCheck();
-			//de incermetn seconds if time does not equal 0
-			if(seconds == 0) {
-				debug("Time is up");
-			} else {
-				seconds--;
-			}
-			debug(time);
-			//Trys to sleep for 1 second
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

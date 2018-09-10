@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 import com.cavariux.twitchirc.Chat.Channel;
 import com.cavariux.twitchirc.Chat.User;
 
+import classes.debug;
+
 /**
  * The main object to start making your bot
  * @author Leonardo Mariscal Edited by Derrick Bush
@@ -32,6 +34,7 @@ public class TwitchBot {
 	private String version = "v1.0-Beta";
 	private String commandTrigger = "!";
 	private String clientID = "";
+	private String testLine = null; //Used for dev testing, never called in application
 	//Int
 	@SuppressWarnings("unused")
 	private int whispers_port = 443;
@@ -233,7 +236,8 @@ public class TwitchBot {
 			}
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			debug.debug("TwitchBotConnect:" + "There was an error connecting to twitch");
+			debug.debug(e.getStackTrace().toString());
 		}
 	}
 	
@@ -247,7 +251,8 @@ public class TwitchBot {
 			this.writer.write(message + " \r\n");
 			this.writer.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			debug.debug("TwitchBotSendRawMessage:" + "There was an error sending raw message");
+			debug.debug(e.getStackTrace().toString());
 		}
 		LOGGER.log(Level.INFO, message.toString());
 	}
@@ -263,7 +268,8 @@ public class TwitchBot {
 			this.writer.write("PRIVMSG " + channel + " :" + message.toString() + "\r\n");
 			this.writer.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			debug.debug("TwitchBotSendMessage:" + "There was an error sending message");
+			debug.debug(e.getStackTrace().toString());
 		}
 		LOGGER.log(Level.INFO,"> MSG " + channel + " : " + message.toString());
 	}
@@ -354,7 +360,7 @@ public class TwitchBot {
 	 * @param channel
 	 * @param message
 	 */
-	protected void onSub(User user, Channel channel, String message)
+	protected void onSub(User user, Channel channel, String message, String type)
 	{
 		
 	}
@@ -498,7 +504,8 @@ public class TwitchBot {
         try {
             this.writer.write("NICK " + newNick + "\r\n");
         }catch (IOException ioe){
-
+        	debug.debug("TwitchBotConnect:" + "There was an error setting nickname");
+			debug.debug(ioe.getStackTrace().toString());
         }
     }
 	
@@ -547,6 +554,8 @@ public class TwitchBot {
 		stopped = false;
 		try {
 			while ((line = this.reader.readLine( )) != null && !stopped) {
+				if(testLine != null)
+					line = testLine;
 				//Makes sure that the bot is still connected to chat
 			    if (line.toLowerCase( ).startsWith("ping")) {
 			    	LOGGER.log(Level.INFO,"> PING");
@@ -629,25 +638,28 @@ public class TwitchBot {
 			    } else if (line.toLowerCase().contains("msg-id=subgift")) {
 			    	System.out.println(line);
 			    	ArrayList<String> info = giftsubSplit(line);
-			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(2), this), info.get(3));
+			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(2), this), info.get(3), "subgift");
 			    	//Runs if a person resubs
 			    } else if (line.toLowerCase().contains("msg-id=resub")) {
 			    	ArrayList<String> info = resubSplit(line);
-			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2));
+			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2), "resub");
 			    	//Runs if a person subs
 			    } else if (line.toLowerCase().contains("msg-id=sub")) {
 			    	ArrayList<String> info = subSplit(line);
-			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2));
+			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2), "sub");
 			    	//Runs if a person raids the channel
 			    } else if (line.toLowerCase().contains("msg-id=raid")) {
 			    	ArrayList<String> info = raidSplit(line);
-			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2));
+			    	onSub(User.getUser(info.get(0)), Channel.getChannel(info.get(1), this), info.get(2), "raid");
 			    } else {
 			        LOGGER.log(Level.INFO,"> " + line);
 			    }
+			    if(testLine != null)
+					testLine = null;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			debug.debug("TwitchBotStart:" + "There was an error while the bot was running, " + line);
+			debug.debug(e.getStackTrace().toString());
 		}
 	}
 }

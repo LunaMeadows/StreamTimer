@@ -1,18 +1,24 @@
 package classes;
 
-public class BotStarter extends Thread{
-	public static void main(String[] args) {
-		TimerBot bot = new TimerBot();
-		bot.connect();
-		bot.joinChannel("#dragonslayer7516");
-		System.out.println("TEST");
-		bot.start();
-	}
+public class BotStarter extends Thread{	
+	//Instance Variables
+	//TimerBot
+	private TimerBot bot;
 	
+	//Methods
+	//Public
+	/**
+	 * Starts a new thread for the bot
+	 */
 	public void run() {
-		TimerBot bot = new TimerBot();
+		//Makes instance of FileClass to get channel name from settings.ini
+		FileClass channelName = new FileClass();
+		channelName.readInSettings();
+		//Creates irc bot
+		bot = new TimerBot();
+		//Connects the bot to twich then to the channel and the starts the bot
 		bot.connect();
-		bot.joinChannel("#dragonslayer7516");
+		bot.joinChannel(channelName.getTwitchChannel());
 		bot.start();
 	}
 }

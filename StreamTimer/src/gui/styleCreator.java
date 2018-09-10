@@ -29,7 +29,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSlider;
 import javax.swing.JRadioButton;
-import javax.swing.border.MatteBorder;
 import java.awt.SystemColor;
 
 public class styleCreator {
@@ -110,6 +109,7 @@ public class styleCreator {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);

@@ -5,6 +5,7 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,12 +13,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 //Swing
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.RepaintManager;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JButton;
@@ -29,10 +31,13 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 //classes
 import classes.FileClass;
 import classes.StyleClass;
+import classes.TimeClass;
+import classes.debug;
 
 //Io
-import java.io.File;
 import java.io.IOException;
+//Net
+import java.net.URI;
 
 public class SetupWindow {
 	// Instance Variables
@@ -55,6 +60,9 @@ public class SetupWindow {
 	private JTextField GiftedSubTimeTF;
 	private JTextField BitsTimeTF;
 	private JTextField HostTimeTF;
+	private JTextField HourTF;
+	private JTextField MinuteTF;
+	private JTextField SecondTF;
 	//JLabel
 	private JLabel lblTwitchChannel;
 	private JLabel lblUserInfo;
@@ -70,6 +78,10 @@ public class SetupWindow {
 	private JLabel lblTwitchOauthKey;
 	private JLabel lblInstructions;
 	private JLabel lblUiSettings;
+	private JLabel lblRestartToTake;
+	private JLabel lblStartTime;
+	private JLabel label;
+	private JLabel label_1;
 	//RadioButton
 	private JRadioButton rdbtnSubTime;
 	private JRadioButton rdbtnResubTime;
@@ -77,6 +89,7 @@ public class SetupWindow {
 	private JRadioButton rdbtnHostraidTime;
 	private JRadioButton rdbtnBitsTime;
 	//JComboBox
+	@SuppressWarnings("rawtypes")
 	private JComboBox StylesCB;
 	//Colors
 	private Color WindowBackground;
@@ -89,8 +102,6 @@ public class SetupWindow {
 	private Color DropdownText;
 	//String
 	private String currentSelection;
-	//Booleans
-	private static boolean debug = true;
 	
 	/**
 	 * Launch the application.
@@ -99,8 +110,8 @@ public class SetupWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SetupWindow window = new SetupWindow();
-					window.frmSetupWindow.setVisible(true);
+					/*SetupWindow window = new SetupWindow();
+					window.frmSetupWindow.setVisible(true);*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -112,7 +123,7 @@ public class SetupWindow {
 	 * Create the application.
 	 */
 	public SetupWindow() {
-		initialize();
+		//initialize();
 	}
 
 	/**
@@ -126,7 +137,7 @@ public class SetupWindow {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
 	private void initialize() {
 		//Initializes Colors
 		StyleClass styles = new StyleClass();
@@ -145,14 +156,14 @@ public class SetupWindow {
 		frmSetupWindow.getContentPane().setBackground(SystemColor.menu);
 		frmSetupWindow.setResizable(false);
 		frmSetupWindow.setTitle("Setup Window");
-		frmSetupWindow.setBounds(100, 100, 400, 512);
+		frmSetupWindow.setBounds(100, 100, 400, 530);
 		frmSetupWindow.getContentPane().setBackground(WindowBackground);
 		frmSetupWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		//Button Initialization
 		//Initializes Reset Default Button
 		btnResetDefault = new JButton("Reset Default");
-		btnResetDefault.setBounds(200, 449, 110, 26);
+		btnResetDefault.setBounds(199, 464, 110, 26);
 		btnResetDefault.setBackground(ButtonBackground);
 		btnResetDefault.setForeground(ButtonText);
 		frmSetupWindow.getContentPane().setLayout(null);
@@ -160,7 +171,7 @@ public class SetupWindow {
 		
 		//Initializes Done Button
 		btnDone = new JButton("Done");
-		btnDone.setBounds(322, 449, 63, 26);
+		btnDone.setBounds(321, 464, 63, 26);
 		btnDone.setBackground(ButtonBackground);
 		btnDone.setForeground(ButtonText);
 		frmSetupWindow.getContentPane().add(btnDone);
@@ -235,7 +246,7 @@ public class SetupWindow {
 		
 		//Format Info Label
 		lblFormatInfo = new JLabel();
-		lblFormatInfo.setText("$TC%-Time Command, $TT%-Time Type, \r\n$TA%-Time Ammount");
+		lblFormatInfo.setText("$TT%-Time Type, \r\n$TA%-Time Ammount");
 		lblFormatInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFormatInfo.setFont(UIManager.getFont("Label.font"));
 		lblFormatInfo.setBounds(20, 236, 359, 16);
@@ -270,6 +281,33 @@ public class SetupWindow {
 		frmSetupWindow.getContentPane().add(lblStyles);
 		frmSetupWindow.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnResetDefault, btnDone}));
 		
+		//Restart Label
+		lblRestartToTake = new JLabel();
+		lblRestartToTake.setText("Restart to take effect on this screen");
+		lblRestartToTake.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRestartToTake.setForeground((Color) null);
+		lblRestartToTake.setFont(UIManager.getFont("Label.font"));
+		lblRestartToTake.setBounds(20, 439, 359, 16);
+		lblRestartToTake.setForeground(Text);
+		frmSetupWindow.getContentPane().add(lblRestartToTake);
+		
+		//Start Time Label
+		lblStartTime = new JLabel("Start Time");
+		lblStartTime.setBounds(282, 330, 59, 16);
+		lblStartTime.setForeground(Text);
+		frmSetupWindow.getContentPane().add(lblStartTime);
+		
+		//HourMinuteSecond Seperator lables
+		label = new JLabel(":");
+		label.setBounds(300, 351, 55, 16);
+		label.setForeground(Text);
+		frmSetupWindow.getContentPane().add(label);
+		
+		label_1 = new JLabel(":");
+		label_1.setBounds(328, 351, 55, 16);
+		label_1.setForeground(Text);
+		frmSetupWindow.getContentPane().add(label_1);
+		
 		//Text Field Initilization
 		//Initializes Bot Name Textfield
 		BotNameTF = new JTextField();
@@ -297,6 +335,7 @@ public class SetupWindow {
 		
 		//Add Time Format Text Field
 		AddTimeFormatTF = new JTextField();
+		AddTimeFormatTF.setText("$TA% $TT%");
 		AddTimeFormatTF.setToolTipText("Default: $DF%-$CN%-$TN%");
 		AddTimeFormatTF.setColumns(25);
 		AddTimeFormatTF.setBounds(120, 192, 265, 20);
@@ -306,6 +345,7 @@ public class SetupWindow {
 		
 		//Subtract Time Format Text Field
 		SubtractTimeFormatTF = new JTextField();
+		SubtractTimeFormatTF.setText("$TA% $TT%");
 		SubtractTimeFormatTF.setToolTipText("Default: $DF%-$CN%-$TN%");
 		SubtractTimeFormatTF.setColumns(25);
 		SubtractTimeFormatTF.setBounds(134, 216, 251, 20);
@@ -315,6 +355,7 @@ public class SetupWindow {
 		
 		//Add Time Command Text Field
 		AddTimeCommandTF = new JTextField();
+		AddTimeCommandTF.setText("addtime");
 		AddTimeCommandTF.setBounds(120, 141, 265, 20);
 		AddTimeCommandTF.setBackground(TextboxBackground);
 		AddTimeCommandTF.setForeground(TextboxText);
@@ -323,6 +364,7 @@ public class SetupWindow {
 		
 		//Subtract Time Command Text Field
 		SubtractTimeCommandTF = new JTextField();
+		SubtractTimeCommandTF.setText("subtracttime");
 		SubtractTimeCommandTF.setColumns(10);
 		SubtractTimeCommandTF.setBounds(148, 167, 237, 20);
 		SubtractTimeCommandTF.setBackground(TextboxBackground);
@@ -331,6 +373,7 @@ public class SetupWindow {
 		
 		//Sub Time Text Field
 		SubTimeTF = new JTextField();
+		SubTimeTF.setText("0");
 		SubTimeTF.setBounds(33, 302, 76, 20);
 		SubTimeTF.setBackground(TextboxBackground);
 		SubTimeTF.setForeground(TextboxText);
@@ -339,6 +382,7 @@ public class SetupWindow {
 		
 		//Resub Time Text Field
 		ResubTimeTF = new JTextField();
+		ResubTimeTF.setText("0");
 		ResubTimeTF.setColumns(10);
 		ResubTimeTF.setBounds(155, 302, 76, 20);
 		ResubTimeTF.setBackground(TextboxBackground);
@@ -347,6 +391,7 @@ public class SetupWindow {
 		
 		//Gifted Sub Time Text Field
 		GiftedSubTimeTF = new JTextField();
+		GiftedSubTimeTF.setText("0");
 		GiftedSubTimeTF.setColumns(10);
 		GiftedSubTimeTF.setBounds(272, 302, 76, 20);
 		GiftedSubTimeTF.setBackground(TextboxBackground);
@@ -355,19 +400,45 @@ public class SetupWindow {
 		
 		//Bits Time Text Field
 		BitsTimeTF = new JTextField();
+		BitsTimeTF.setText("0");
 		BitsTimeTF.setColumns(10);
-		BitsTimeTF.setBounds(95, 347, 76, 20);
+		BitsTimeTF.setBounds(34, 350, 76, 20);
 		BitsTimeTF.setBackground(TextboxBackground);
 		BitsTimeTF.setForeground(TextboxText);
 		frmSetupWindow.getContentPane().add(BitsTimeTF);
 		
 		//Host Time Text Field
 		HostTimeTF = new JTextField();
+		HostTimeTF.setText("0");
 		HostTimeTF.setColumns(10);
-		HostTimeTF.setBounds(218, 347, 76, 20);
+		HostTimeTF.setBounds(153, 350, 76, 20);
 		HostTimeTF.setBackground(TextboxBackground);
 		HostTimeTF.setForeground(TextboxText);
 		frmSetupWindow.getContentPane().add(HostTimeTF);
+		
+		//Hour Time Text Field
+		HourTF = new JTextField();
+		HourTF.setHorizontalAlignment(SwingConstants.RIGHT);
+		HourTF.setText("0");
+		HourTF.setBounds(278, 349, 20, 20);
+		frmSetupWindow.getContentPane().add(HourTF);
+		HourTF.setColumns(10);
+		
+		//Minute Time Text Field
+		MinuteTF = new JTextField();
+		MinuteTF.setHorizontalAlignment(SwingConstants.RIGHT);
+		MinuteTF.setText("0");
+		MinuteTF.setColumns(10);
+		MinuteTF.setBounds(305, 349, 20, 20);
+		frmSetupWindow.getContentPane().add(MinuteTF);
+		
+		//Second Time Text Field
+		SecondTF = new JTextField();
+		SecondTF.setHorizontalAlignment(SwingConstants.RIGHT);
+		SecondTF.setText("0");
+		SecondTF.setColumns(10);
+		SecondTF.setBounds(334, 349, 20, 20);
+		frmSetupWindow.getContentPane().add(SecondTF);
 		
 		//RadioButtons
 		//Sub Time Radio Button
@@ -393,14 +464,14 @@ public class SetupWindow {
 		
 		// Host/Raid Time Radio Button
 		rdbtnHostraidTime = new JRadioButton("Host/Raid time");
-		rdbtnHostraidTime.setBounds(203, 323, 107, 24);
+		rdbtnHostraidTime.setBounds(138, 326, 107, 24);
 		rdbtnHostraidTime.setBackground(WindowBackground);
 		rdbtnHostraidTime.setForeground(Text);
 		frmSetupWindow.getContentPane().add(rdbtnHostraidTime);
 		
 		//Bits Time Radio Button
 		rdbtnBitsTime = new JRadioButton("Bits time");
-		rdbtnBitsTime.setBounds(95, 323, 75, 24);
+		rdbtnBitsTime.setBounds(34, 326, 75, 24);
 		rdbtnBitsTime.setBackground(WindowBackground);
 		rdbtnBitsTime.setForeground(Text);
 		frmSetupWindow.getContentPane().add(rdbtnBitsTime);
@@ -412,7 +483,7 @@ public class SetupWindow {
 		StylesCB.setBounds(48, 412, 337, 25);
 		StylesCB.setBackground(DropdownBackground);
 		StylesCB.setForeground(DropdownText);
-		frmSetupWindow.getContentPane().add(StylesCB);
+		frmSetupWindow.getContentPane().add(StylesCB);		
 		
 		//Methods
 		//Listeners
@@ -425,7 +496,8 @@ public class SetupWindow {
 					try {
 						styles.changeStyle("style_" + String.valueOf(StylesCB.getSelectedItem()));
 					} catch (IOException e1) {
-						System.out.println("File not found");
+						debug.debug("SetupWindowStylesActionListener:" + "There was an error getting styles");
+						debug.debug(e1.getStackTrace().toString());
 					}
 					WindowBackground = styles.getWindow_background();
 					ButtonBackground = styles.getButton_background();
@@ -435,7 +507,6 @@ public class SetupWindow {
 					Text = styles.getText();
 					DropdownBackground = styles.getDropdown_background();
 					DropdownText = styles.getDropdown_text();
-					
 				}
 			}
 		});
@@ -448,8 +519,6 @@ public class SetupWindow {
 				int confirmation = JOptionPane.showConfirmDialog(null, "This is a required part of setup, closing now can cause many problems and even make the program not work at all. Are you sure you want to close? Doing so will stop the program.");
 				if(confirmation == JOptionPane.YES_OPTION) {
 					System.exit(0);
-				} else {
-					
 				}
 			}
 		});
@@ -460,7 +529,10 @@ public class SetupWindow {
 		btnResetDefault.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+				AddTimeCommandTF.setText("addtime");
+				SubtractTimeCommandTF.setText("subtracttime");
+				AddTimeFormatTF.setText("$TA% $TT%");
+				SubtractTimeFormatTF.setText("$TA% $TT%");
 			}
 		});
 		
@@ -470,21 +542,59 @@ public class SetupWindow {
 		btnDone.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				FileClass save = new FileClass();
+				if(save.checkTimeFormat(SubtractTimeFormatTF.getText()).equals("clear") && save.checkTimeFormat(AddTimeFormatTF.getText()).equals("clear")) {
+					save.saveSettings(BotNameTF.getText(), OAuthKeyTF.getText(), ChannelTF.getText(), AddTimeCommandTF.getText(), SubtractTimeCommandTF.getText(), AddTimeFormatTF.getText(), SubtractTimeFormatTF.getText());
+				}
+				TimeClass timeSave = new TimeClass("saveSettings");
+				if(rdbtnSubTime.isSelected())
+					timeSave.setSubTime(Integer.parseInt(SubTimeTF.getText()));
+				if(rdbtnResubTime.isSelected())
+					timeSave.setResubTime(Integer.parseInt(ResubTimeTF.getText()));
+				if(rdbtnGiftedSubTime.isSelected())
+					timeSave.setGiftedsubTime(Integer.parseInt(GiftedSubTimeTF.getText()));
+				if(rdbtnBitsTime.isSelected())
+					timeSave.setBitsTime(Integer.parseInt(BitsTimeTF.getText()));
+				if(rdbtnHostraidTime.isSelected())
+					timeSave.setRaidTime(Integer.parseInt(HostTimeTF.getText()));
+				int[] hours = {Integer.parseInt(HourTF.getText()),Integer.parseInt(MinuteTF.getText()),Integer.parseInt(SecondTF.getText())};
+				timeSave.setStartTime(hours);
+				timeSave.save();
+				frmSetupWindow.dispose();
 			}
 		});
-	}
-	//Public
-	//Private
-	/**
-	 * Easy debug method to output a string to console if debuging is turned on.
-	 * 
-	 * @param message is the message that is printed to console
-	 */
-	@SuppressWarnings("unused")
-	private static void debug(String message) {
-		if(debug) {
-			System.out.println(message);}
+		
+		btnGetOauthKey.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					  Desktop desktop = java.awt.Desktop.getDesktop();
+					  URI oURL = new URI("https://twitchapps.com/tmi/");
+					  desktop.browse(oURL);
+					} catch (Exception e) {
+						debug.debug("SetupWindowGetOAuthActionLister:" + "There was an error getting window");
+						debug.debug(e.getStackTrace().toString());
+					}
+			}
+		});
+		
+
+		SecondTF.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if(Integer.parseInt(SecondTF.getText()) > 60) {
+					SecondTF.setText("60");
+				}
+			}
+		});
+		
+		MinuteTF.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if(Integer.parseInt(MinuteTF.getText()) > 60) {
+					MinuteTF.setText("60");
+				}
+			}
+		});
 	}
 	
 	/**
