@@ -237,7 +237,7 @@ public class TwitchBot {
 		} catch (IOException e)
 		{
 			debug.debug("TwitchBotConnect:" + "There was an error connecting to twitch");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 	}
 	
@@ -252,7 +252,7 @@ public class TwitchBot {
 			this.writer.flush();
 		} catch (IOException e) {
 			debug.debug("TwitchBotSendRawMessage:" + "There was an error sending raw message");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 		LOGGER.log(Level.INFO, message.toString());
 	}
@@ -269,7 +269,7 @@ public class TwitchBot {
 			this.writer.flush();
 		} catch (IOException e) {
 			debug.debug("TwitchBotSendMessage:" + "There was an error sending message");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 		LOGGER.log(Level.INFO,"> MSG " + channel + " : " + message.toString());
 	}
@@ -505,7 +505,7 @@ public class TwitchBot {
             this.writer.write("NICK " + newNick + "\r\n");
         }catch (IOException ioe){
         	debug.debug("TwitchBotConnect:" + "There was an error setting nickname");
-			debug.debug(ioe.getStackTrace().toString());
+			debug.debug(ioe.getStackTrace());
         }
     }
 	
@@ -659,7 +659,7 @@ public class TwitchBot {
 			}
 		} catch (IOException e) {
 			debug.debug("TwitchBotStart:" + "There was an error while the bot was running, " + line);
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 	}
 }

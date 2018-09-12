@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 public class UpdateChecker {
 	//Instance Variables
 	private final static String USER_AGENT = "Mozilla/5.0";
-	private final static String VERSION = "Version 1";
+	private final static String VERSION = "Version 1.1";
 	
 	//Methods
 	public static void updateCheckStandalone() throws Exception {
@@ -47,6 +47,7 @@ public class UpdateChecker {
 					  desktop.browse(oURL);
 					} catch (Exception e) {
 						debug.debug("UpdateCheckerStandalone:" + "There was an error getting the users desktop");
+						debug.debug(e.getStackTrace());
 					}
 			}
 		}

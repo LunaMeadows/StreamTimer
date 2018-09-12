@@ -99,7 +99,7 @@ public class TimerBot extends TwitchBot{
 			write = new FileWriter(update, true);
 		} catch (IOException e1) {
 			debug.debug("TimerBotCommand:" + "There was an error creating the FileWriter");
-			debug.debug(e1.getStackTrace().toString());
+			debug.debug(e1.getStackTrace());
 			return;
 		}
 		BufferedWriter writeBuff = new BufferedWriter(write);
@@ -119,11 +119,11 @@ public class TimerBot extends TwitchBot{
 				}
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommand:" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommand:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the command is equal to the subTimeCommand
@@ -142,11 +142,11 @@ public class TimerBot extends TwitchBot{
 				
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommand:" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommand:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the command is toggleDebug
@@ -163,11 +163,11 @@ public class TimerBot extends TwitchBot{
 				writeBuff.newLine();
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommandSub:" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandSub:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the type is a resub
@@ -178,11 +178,11 @@ public class TimerBot extends TwitchBot{
 				writeBuff.newLine();
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommandResub:" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandResub:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the type is a subgift
@@ -193,11 +193,11 @@ public class TimerBot extends TwitchBot{
 				writeBuff.newLine();
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommandSubGift:" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandSubGift:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the type is a raid
@@ -208,11 +208,11 @@ public class TimerBot extends TwitchBot{
 				writeBuff.newLine();
 			} catch (NumberFormatException e) {
 				debug.debug("TimerBotCommand:Raid" + "There was not a number where there should of been, " + message);
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandRaid:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			//Runs if the type is bits
@@ -227,7 +227,7 @@ public class TimerBot extends TwitchBot{
 				return;
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandBits:" + "There was an error creating the BufferedWriter");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 		} else {
@@ -239,7 +239,7 @@ public class TimerBot extends TwitchBot{
 				write.close();
 			} catch (IOException e) {
 				debug.debug("TimerBotCommandClose:" + "There was an error closing Writers");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 			}
 		}
 	}
@@ -259,7 +259,7 @@ public class TimerBot extends TwitchBot{
 			//sendMessage("Adding time now", channel);
 		} catch (IOException e) {
 			debug.debug("TimerBotCommandClose:" + "There was an error creating writers");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 	}
 	
@@ -278,7 +278,7 @@ public class TimerBot extends TwitchBot{
 			//sendMessage("sub time now", channel);
 		} catch (IOException e) {
 			debug.debug("TimerBotCommandClose:" + "There was an error creating writers");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 	}
 }

@@ -497,7 +497,7 @@ public class SetupWindow {
 						styles.changeStyle("style_" + String.valueOf(StylesCB.getSelectedItem()));
 					} catch (IOException e1) {
 						debug.debug("SetupWindowStylesActionListener:" + "There was an error getting styles");
-						debug.debug(e1.getStackTrace().toString());
+						debug.debug(e1.getStackTrace());
 					}
 					WindowBackground = styles.getWindow_background();
 					ButtonBackground = styles.getButton_background();
@@ -572,7 +572,7 @@ public class SetupWindow {
 					  desktop.browse(oURL);
 					} catch (Exception e) {
 						debug.debug("SetupWindowGetOAuthActionLister:" + "There was an error getting window");
-						debug.debug(e.getStackTrace().toString());
+						debug.debug(e.getStackTrace());
 					}
 			}
 		});

@@ -66,6 +66,41 @@ public class debug {
 	}
 	
 	/**
+	 * Writes to the debug.txt file if debuging is turned on
+	 * @param bug What is logged in the file
+	 */
+	public static void debug(StackTraceElement[] bug) {
+		//Makes a file of debug.txt
+		File debugFile = new File("debug.txt");
+		//Checks if the file exists and if not makes it
+		if(!debugFile.exists()) {
+			createFile();
+		} else {
+			//Creates instance of a scanner to check if debug is turned on or not
+			Scanner check = null;
+			try {
+				check = new Scanner(debugFile);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			//If check has a new line and it is equal to true then write the bug to the file else do nothing
+			if(check.hasNextLine() && debugOn()) {
+				try {
+					FileWriter debugWriter = new FileWriter(debugFile,true);
+					for(StackTraceElement trace : bug)
+						debugWriter.write(trace + "\n");
+					debugWriter.write("\n");
+					debugWriter.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Checks if debug is active
 	 */
 	public static boolean debugOn() {

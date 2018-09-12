@@ -57,7 +57,7 @@ public class StyleClass {
 			activeRead = new Scanner(active);
 		} catch (FileNotFoundException e) {
 			debug.debug("StyleClassReadIn:" + "The file was not found, " + file);
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 		while(activeRead != null && activeRead.hasNext()) {
 			String hold = activeRead.nextLine();

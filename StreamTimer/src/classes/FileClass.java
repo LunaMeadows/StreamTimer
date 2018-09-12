@@ -167,7 +167,6 @@ public class FileClass {
 	 */
 	public void saveSettings(String BotName, String BotOAuth, String TwitchChannel, String AddTimeCommand, String SubTimeCommand, String AddTimeFormat, String SubTimeFormat) {
 		// Creates instance of File to create the settings.ini file
-		
 		File settingsFile = null;
 		// Try loop to make sure that the file gets created if it is not there at the start
 		try {
@@ -195,8 +194,14 @@ public class FileClass {
 			} catch (IOException e1) {
 				// Catches if there is any errors for debugging
 				debug.debug("FileClassSaveSettings:" + System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini");
-				debug.debug(e1.getStackTrace().toString());
+				debug.debug(e1.getStackTrace());
 			}
+		}
+		try {
+			Cryption.encrypt("This is a test k", settingsFile);
+		} catch (CryptoException e) {
+			debug.debug("FileClassSaveSettings:" + "There was an error encrypting the file.");
+			debug.debug(e.getStackTrace());
 		}
 	}
 	
@@ -204,8 +209,15 @@ public class FileClass {
 	 * Reads in settings from settings.ini
 	 */
 	public void readInSettings() {
-		// Creates instance of File to create the settings.ini file
-		File settingsFile = new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini");
+		// Creates instance of File to create the settings.ini temp file
+		File settingsFile = null;
+		try {
+			settingsFile = Cryption.decrypt("This is a test k", new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini"));
+		} catch (CryptoException | IOException e1) {
+			debug.debug("FileClassSaveSettings:" + "There was an error decrypting the file.");
+			debug.debug(e1.getStackTrace());
+			return;
+		}
 		// Try loop to make sure that the file gets created if it is not there at the
 		// start
 		try {
@@ -224,8 +236,9 @@ public class FileClass {
 			// Catches if the file does not exist
 		} catch (IOException e) {
 			debug.debug("FileClassReadInSettings:" + "Error creating new file");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
+		settingsFile.delete();
 	}
 		
 	// Getters

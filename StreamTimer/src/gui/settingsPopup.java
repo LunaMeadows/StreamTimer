@@ -352,7 +352,7 @@ public class settingsPopup {
 						styles.changeStyle("style_" + String.valueOf(StylesCB.getSelectedItem()));
 					} catch (IOException e1) {
 						debug.debug("SettignsPopupStylesAcctionListener:" + "There was an error getting the styles");
-						debug.debug(e1.getStackTrace().toString());
+						debug.debug(e1.getStackTrace());
 					}
 					WindowBackground = styles.getWindow_background();
 					ButtonBackground = styles.getButton_background();

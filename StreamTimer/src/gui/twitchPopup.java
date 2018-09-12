@@ -131,7 +131,7 @@ public class twitchPopup {
 					  desktop.browse(oURL);
 					} catch (Exception e) {
 						debug.debug("TwitchPopupGetOAuthActionLister:" + "There was an error getting window");
-						debug.debug(e.getStackTrace().toString());
+						debug.debug(e.getStackTrace());
 					}
 			}
 		});

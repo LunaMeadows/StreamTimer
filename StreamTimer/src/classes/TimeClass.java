@@ -47,7 +47,7 @@ public class TimeClass {
 			scan = new Scanner(times);
 		} catch (FileNotFoundException e) {
 			debug.debug("TimeClassReadIn:" + "There was an error creating the scanner");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 		//While the file has lines read through and set variables
 		while(scan.hasNext()) {
@@ -91,7 +91,7 @@ public class TimeClass {
 			write.close();
 		} catch (IOException e) {
 			debug.debug("TimeClassSave:" + "There was an error creating the writer");
-			debug.debug(e.getStackTrace().toString());
+			debug.debug(e.getStackTrace());
 		}
 	}
 	

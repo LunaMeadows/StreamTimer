@@ -54,7 +54,7 @@ public class StreamTimer extends Thread{
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e) {
 					debug.debug("StreamTimerRun:" + "There was an error waiting 1 second");
-					debug.debug(e.getStackTrace().toString());
+					debug.debug(e.getStackTrace());
 				}
 			}
 		}
@@ -160,7 +160,7 @@ public class StreamTimer extends Thread{
 			input = new Scanner(timer);
 		} catch (FileNotFoundException e1) {
 			debug.debug("StreamTimerCommand:" + "There was an error creating the scanner");
-			debug.debug(e1.getStackTrace().toString());
+			debug.debug(e1.getStackTrace());
 			return;
 		}
 		//While the scanner has a new line in timer.txt it will go through and execute all commands from top to bottom
@@ -171,7 +171,7 @@ public class StreamTimer extends Thread{
 			} catch (IOException e) {
 				input.close();
 				debug.debug("StreamTimerCommand:" + "There was an error getting the command");
-				debug.debug(e.getStackTrace().toString());
+				debug.debug(e.getStackTrace());
 				return;
 			}
 			if(command != null)
@@ -197,7 +197,7 @@ public class StreamTimer extends Thread{
 			hold = input.nextLine();
 		} catch (NoSuchElementException ex) {
 			debug.debug("StreamTimerGetCommand:" + "There was an error creating the scanner");
-			debug.debug(ex.getStackTrace().toString());
+			debug.debug(ex.getStackTrace());
 			input.close();
 			return null;
 		}
@@ -244,7 +244,7 @@ public class StreamTimer extends Thread{
 			Integer.parseInt(split[2]);
 		} catch (NumberFormatException ex) {
 			debug.debug("StreamTimerAddTime:" + "Was not an int when it should of been, " + command);
-			debug.debug(ex.getStackTrace().toString());
+			debug.debug(ex.getStackTrace());
 			return;
 		}
 		if(split[1].equals("seconds")) {
@@ -267,7 +267,7 @@ public class StreamTimer extends Thread{
 			Integer.parseInt(split[2]);
 		} catch (NumberFormatException ex) {
 			debug.debug("StreamTimerSubtractTime:" + "Was not an int when it should of been, " + command);
-			debug.debug(ex.getStackTrace().toString());
+			debug.debug(ex.getStackTrace());
 			return;
 		}
 		if(split[1].equals("seconds")) {

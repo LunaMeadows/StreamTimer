@@ -235,7 +235,7 @@ public class TimerGUI extends Thread{
 					scan = new Scanner(update);
 				} catch (FileNotFoundException e) {
 					debug.debug("TimerGUIUpdateChecker:" + "Could not find the file");
-					debug.debug(e.getStackTrace().toString());
+					debug.debug(e.getStackTrace());
 				}
 		    	  while(scan.hasNextLine()) {
 		    		  String hold = scan.nextLine();
@@ -379,7 +379,7 @@ public class TimerGUI extends Thread{
 						clearWrite.close();
 					} catch (IOException e1) {
 						debug.debug("TimerGUIUpdateChecker:" + "There was an error clearing updates");
-						debug.debug(e1.getStackTrace().toString());
+						debug.debug(e1.getStackTrace());
 					}
 				}
 			});
