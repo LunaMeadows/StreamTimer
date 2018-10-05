@@ -38,6 +38,8 @@ import classes.debug;
 import java.io.IOException;
 //Net
 import java.net.URI;
+//Util
+import java.util.ArrayList;
 
 public class SetupWindow {
 	// Instance Variables
@@ -91,17 +93,15 @@ public class SetupWindow {
 	//JComboBox
 	@SuppressWarnings("rawtypes")
 	private JComboBox StylesCB;
-	//Colors
-	private Color WindowBackground;
-	private Color ButtonBackground;
-	private Color ButtonText;
-	private Color TextboxBackground;
-	private Color TextboxText;
-	private Color Text;
-	private Color DropdownBackground;
-	private Color DropdownText;
 	//String
 	private String currentSelection;
+	//StyleClass
+	private StyleClass styles;
+	//ArrayList
+	ArrayList<JButton> buttons = new ArrayList<JButton>();
+	ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	ArrayList<JTextField> textFields = new ArrayList<JTextField>();
+	ArrayList<JRadioButton> radioButtons = new ArrayList<JRadioButton>();
 	
 	/**
 	 * Launch the application.
@@ -140,16 +140,7 @@ public class SetupWindow {
 	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
 	private void initialize() {
 		//Initializes Colors
-		StyleClass styles = new StyleClass();
-		currentSelection = styles.getStyle();
-		WindowBackground = styles.getWindow_background();
-		ButtonBackground = styles.getButton_background();
-		ButtonText = styles.getButton_text();
-		TextboxBackground = styles.getTextbox_background();
-		TextboxText = styles.getTextbox_text();
-		Text = styles.getText();
-		DropdownBackground = styles.getDropdown_background();
-		DropdownText = styles.getDropdown_text();
+		styles = new StyleClass();
 		
 		//Initializes Setup Window
 		frmSetupWindow = new JFrame();
@@ -157,91 +148,87 @@ public class SetupWindow {
 		frmSetupWindow.setResizable(false);
 		frmSetupWindow.setTitle("Setup Window");
 		frmSetupWindow.setBounds(100, 100, 400, 530);
-		frmSetupWindow.getContentPane().setBackground(WindowBackground);
 		frmSetupWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		//Button Initialization
 		//Initializes Reset Default Button
 		btnResetDefault = new JButton("Reset Default");
 		btnResetDefault.setBounds(199, 464, 110, 26);
-		btnResetDefault.setBackground(ButtonBackground);
-		btnResetDefault.setForeground(ButtonText);
+		buttons.add(btnResetDefault);
 		frmSetupWindow.getContentPane().setLayout(null);
 		frmSetupWindow.getContentPane().add(btnResetDefault);
 		
 		//Initializes Done Button
 		btnDone = new JButton("Done");
 		btnDone.setBounds(321, 464, 63, 26);
-		btnDone.setBackground(ButtonBackground);
-		btnDone.setForeground(ButtonText);
+		buttons.add(btnDone);
 		frmSetupWindow.getContentPane().add(btnDone);
 		
 		//Initializes OAuth Button
 		btnGetOauthKey = new JButton("Get OAuth Key");
 		btnGetOauthKey.setBounds(120, 69, 136, 26);
-		btnGetOauthKey.setBackground(ButtonBackground);
-		btnGetOauthKey.setForeground(ButtonText);
+		buttons.add(btnGetOauthKey);
 		frmSetupWindow.getContentPane().add(btnGetOauthKey);
 		
 		//Label Initilization
 		//Initializes Twitch Username Label
 		lblTwitchUsername = new JLabel("Twitch Bot name:");
 		lblTwitchUsername.setBounds(20, 22, 98, 16);
-		lblTwitchUsername.setForeground(Text);
+		labels.add(lblTwitchUsername);
 		frmSetupWindow.getContentPane().add(lblTwitchUsername);
 		
 		//Initializes OAuth label
 		lblTwitchOauthKey = new JLabel("Bot OAuth key:");
 		lblTwitchOauthKey.setBounds(33, 48, 83, 16);
-		lblTwitchOauthKey.setForeground(Text);
+		labels.add(lblTwitchOauthKey);
 		frmSetupWindow.getContentPane().add(lblTwitchOauthKey);
 		
 		//Initializes Channel Label
 		lblTwitchChannel = new JLabel("Twitch Channel:");
 		lblTwitchChannel.setBounds(27, 101, 90, 16);
-		lblTwitchChannel.setForeground(Text);
+		labels.add(lblTwitchChannel);
 		frmSetupWindow.getContentPane().add(lblTwitchChannel);
 		
 		//User Info Label
 		lblUserInfo = new JLabel("-----------------------------------------USER INFO-----------------------------------------");
 		lblUserInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUserInfo.setBounds(0, 0, 397, 16);
-		lblUserInfo.setForeground(Text);
+		labels.add(lblUserInfo);
 		frmSetupWindow.getContentPane().add(lblUserInfo);
 		
 		//Command Info Label
 		lblCommandInfo = new JLabel("-------------------------------------COMMAND INFO-------------------------------------");
 		lblCommandInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCommandInfo.setBounds(0, 118, 397, 16);
-		lblCommandInfo.setForeground(Text);
+		labels.add(lblCommandInfo);
 		frmSetupWindow.getContentPane().add(lblCommandInfo);
 		
 		//Time Settings Label
 		lblTimeSettings = new JLabel("-------------------------------------TIME SETTINGS-------------------------------------");
 		lblTimeSettings.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTimeSettings.setBounds(0, 254, 397, 16);
-		lblTimeSettings.setForeground(Text);
+		labels.add(lblTimeSettings);
 		frmSetupWindow.getContentPane().add(lblTimeSettings);
 		
 		//Ui Settings Label
 		lblUiSettings = new JLabel("---------------------------------------UI SETTINGS---------------------------------------");
 		lblUiSettings.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUiSettings.setBounds(0, 389, 397, 16);
-		lblUiSettings.setForeground(Text);
+		labels.add(lblUiSettings);
 		frmSetupWindow.getContentPane().add(lblUiSettings);
 		
 		//Add Time Format Label
 		lblAddTimeFormat = new JLabel("Add Time Format:");
 		lblAddTimeFormat.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAddTimeFormat.setBounds(19, 193, 99, 16);
-		lblAddTimeFormat.setForeground(Text);
+		labels.add(lblAddTimeFormat);
 		frmSetupWindow.getContentPane().add(lblAddTimeFormat);
 		
 		//Subtract Time Format Label
 		lblSubtractTimeFormat = new JLabel("Subtract Time Format:");
 		lblSubtractTimeFormat.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSubtractTimeFormat.setBounds(3, 219, 126, 16);
-		lblSubtractTimeFormat.setForeground(Text);
+		labels.add(lblSubtractTimeFormat);
 		frmSetupWindow.getContentPane().add(lblSubtractTimeFormat);
 		
 		//Format Info Label
@@ -250,19 +237,19 @@ public class SetupWindow {
 		lblFormatInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFormatInfo.setFont(UIManager.getFont("Label.font"));
 		lblFormatInfo.setBounds(20, 236, 359, 16);
-		lblFormatInfo.setForeground(Text);
+		labels.add(lblFormatInfo);
 		frmSetupWindow.getContentPane().add(lblFormatInfo);
 		
 		//Add Time Command Label
 		lblAddTimeCommand = new JLabel("Add Time Command:");
 		lblAddTimeCommand.setBounds(2, 143, 117, 16);
-		lblAddTimeCommand.setForeground(Text);
+		labels.add(lblAddTimeCommand);
 		frmSetupWindow.getContentPane().add(lblAddTimeCommand);
 		
 		//Subtract Time Command Label
 		lblSubtractTimeCommand = new JLabel("Subtract Time Command:");
 		lblSubtractTimeCommand.setBounds(0, 169, 151, 16);
-		lblSubtractTimeCommand.setForeground(Text);
+		labels.add(lblSubtractTimeCommand);
 		frmSetupWindow.getContentPane().add(lblSubtractTimeCommand);
 		
 		//Instructions Label
@@ -271,13 +258,13 @@ public class SetupWindow {
 		lblInstructions.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInstructions.setFont(UIManager.getFont("Label.font"));
 		lblInstructions.setBounds(20, 371, 359, 16);
-		lblInstructions.setForeground(Text);
+		labels.add(lblInstructions);
 		frmSetupWindow.getContentPane().add(lblInstructions);
 		
 		//Styles Label
 		lblStyles = new JLabel("Styles");
 		lblStyles.setBounds(10, 417, 55, 16);
-		lblStyles.setForeground(Text);
+		labels.add(lblStyles);
 		frmSetupWindow.getContentPane().add(lblStyles);
 		frmSetupWindow.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnResetDefault, btnDone}));
 		
@@ -288,48 +275,45 @@ public class SetupWindow {
 		lblRestartToTake.setForeground((Color) null);
 		lblRestartToTake.setFont(UIManager.getFont("Label.font"));
 		lblRestartToTake.setBounds(20, 439, 359, 16);
-		lblRestartToTake.setForeground(Text);
+		labels.add(lblRestartToTake);
 		frmSetupWindow.getContentPane().add(lblRestartToTake);
 		
 		//Start Time Label
 		lblStartTime = new JLabel("Start Time");
 		lblStartTime.setBounds(282, 330, 59, 16);
-		lblStartTime.setForeground(Text);
+		labels.add(lblStartTime);
 		frmSetupWindow.getContentPane().add(lblStartTime);
 		
 		//HourMinuteSecond Seperator lables
 		label = new JLabel(":");
 		label.setBounds(300, 351, 55, 16);
-		label.setForeground(Text);
+		labels.add(label);
 		frmSetupWindow.getContentPane().add(label);
 		
 		label_1 = new JLabel(":");
 		label_1.setBounds(328, 351, 55, 16);
-		label_1.setForeground(Text);
+		labels.add(label_1);
 		frmSetupWindow.getContentPane().add(label_1);
 		
 		//Text Field Initilization
 		//Initializes Bot Name Textfield
 		BotNameTF = new JTextField();
 		BotNameTF.setBounds(120, 20, 265, 20);
-		BotNameTF.setBackground(TextboxBackground);
-		BotNameTF.setForeground(TextboxText);
+		textFields.add(BotNameTF);
 		frmSetupWindow.getContentPane().add(BotNameTF);
 		BotNameTF.setColumns(10);
 		
 		//Initializes OAuth Testfield
 		OAuthKeyTF = new JTextField();
 		OAuthKeyTF.setBounds(120, 46, 265, 20);
-		OAuthKeyTF.setBackground(TextboxBackground);
-		OAuthKeyTF.setForeground(TextboxText);
+		textFields.add(OAuthKeyTF);
 		frmSetupWindow.getContentPane().add(OAuthKeyTF);
 		OAuthKeyTF.setColumns(10);
 		
 		//Ititializes Channel Textfield
 		ChannelTF = new JTextField();
 		ChannelTF.setBounds(120, 99, 265, 20);
-		ChannelTF.setBackground(TextboxBackground);
-		ChannelTF.setForeground(TextboxText);
+		textFields.add(ChannelTF);
 		frmSetupWindow.getContentPane().add(ChannelTF);
 		ChannelTF.setColumns(10);
 		
@@ -339,8 +323,7 @@ public class SetupWindow {
 		AddTimeFormatTF.setToolTipText("Default: $DF%-$CN%-$TN%");
 		AddTimeFormatTF.setColumns(25);
 		AddTimeFormatTF.setBounds(120, 192, 265, 20);
-		AddTimeFormatTF.setBackground(TextboxBackground);
-		AddTimeFormatTF.setForeground(TextboxText);
+		textFields.add(AddTimeFormatTF);
 		frmSetupWindow.getContentPane().add(AddTimeFormatTF);
 		
 		//Subtract Time Format Text Field
@@ -349,16 +332,14 @@ public class SetupWindow {
 		SubtractTimeFormatTF.setToolTipText("Default: $DF%-$CN%-$TN%");
 		SubtractTimeFormatTF.setColumns(25);
 		SubtractTimeFormatTF.setBounds(134, 216, 251, 20);
-		SubtractTimeFormatTF.setBackground(TextboxBackground);
-		SubtractTimeFormatTF.setForeground(TextboxText);
+		textFields.add(SubtractTimeFormatTF);
 		frmSetupWindow.getContentPane().add(SubtractTimeFormatTF);
 		
 		//Add Time Command Text Field
 		AddTimeCommandTF = new JTextField();
 		AddTimeCommandTF.setText("addtime");
 		AddTimeCommandTF.setBounds(120, 141, 265, 20);
-		AddTimeCommandTF.setBackground(TextboxBackground);
-		AddTimeCommandTF.setForeground(TextboxText);
+		textFields.add(AddTimeCommandTF);
 		frmSetupWindow.getContentPane().add(AddTimeCommandTF);
 		AddTimeCommandTF.setColumns(10);
 		
@@ -367,16 +348,14 @@ public class SetupWindow {
 		SubtractTimeCommandTF.setText("subtracttime");
 		SubtractTimeCommandTF.setColumns(10);
 		SubtractTimeCommandTF.setBounds(148, 167, 237, 20);
-		SubtractTimeCommandTF.setBackground(TextboxBackground);
-		SubtractTimeCommandTF.setForeground(TextboxText);
+		textFields.add(SubtractTimeCommandTF);
 		frmSetupWindow.getContentPane().add(SubtractTimeCommandTF);
 		
 		//Sub Time Text Field
 		SubTimeTF = new JTextField();
 		SubTimeTF.setText("0");
 		SubTimeTF.setBounds(33, 302, 76, 20);
-		SubTimeTF.setBackground(TextboxBackground);
-		SubTimeTF.setForeground(TextboxText);
+		textFields.add(SubTimeTF);
 		frmSetupWindow.getContentPane().add(SubTimeTF);
 		SubTimeTF.setColumns(10);
 		
@@ -385,8 +364,7 @@ public class SetupWindow {
 		ResubTimeTF.setText("0");
 		ResubTimeTF.setColumns(10);
 		ResubTimeTF.setBounds(155, 302, 76, 20);
-		ResubTimeTF.setBackground(TextboxBackground);
-		ResubTimeTF.setForeground(TextboxText);
+		textFields.add(ResubTimeTF);
 		frmSetupWindow.getContentPane().add(ResubTimeTF);
 		
 		//Gifted Sub Time Text Field
@@ -394,8 +372,7 @@ public class SetupWindow {
 		GiftedSubTimeTF.setText("0");
 		GiftedSubTimeTF.setColumns(10);
 		GiftedSubTimeTF.setBounds(272, 302, 76, 20);
-		GiftedSubTimeTF.setBackground(TextboxBackground);
-		GiftedSubTimeTF.setForeground(TextboxText);
+		textFields.add(GiftedSubTimeTF);
 		frmSetupWindow.getContentPane().add(GiftedSubTimeTF);
 		
 		//Bits Time Text Field
@@ -403,8 +380,7 @@ public class SetupWindow {
 		BitsTimeTF.setText("0");
 		BitsTimeTF.setColumns(10);
 		BitsTimeTF.setBounds(34, 350, 76, 20);
-		BitsTimeTF.setBackground(TextboxBackground);
-		BitsTimeTF.setForeground(TextboxText);
+		textFields.add(BitsTimeTF);
 		frmSetupWindow.getContentPane().add(BitsTimeTF);
 		
 		//Host Time Text Field
@@ -412,8 +388,7 @@ public class SetupWindow {
 		HostTimeTF.setText("0");
 		HostTimeTF.setColumns(10);
 		HostTimeTF.setBounds(153, 350, 76, 20);
-		HostTimeTF.setBackground(TextboxBackground);
-		HostTimeTF.setForeground(TextboxText);
+		textFields.add(HostTimeTF);
 		frmSetupWindow.getContentPane().add(HostTimeTF);
 		
 		//Hour Time Text Field
@@ -421,6 +396,7 @@ public class SetupWindow {
 		HourTF.setHorizontalAlignment(SwingConstants.RIGHT);
 		HourTF.setText("0");
 		HourTF.setBounds(278, 349, 20, 20);
+		textFields.add(HourTF);
 		frmSetupWindow.getContentPane().add(HourTF);
 		HourTF.setColumns(10);
 		
@@ -430,6 +406,7 @@ public class SetupWindow {
 		MinuteTF.setText("0");
 		MinuteTF.setColumns(10);
 		MinuteTF.setBounds(305, 349, 20, 20);
+		textFields.add(MinuteTF);
 		frmSetupWindow.getContentPane().add(MinuteTF);
 		
 		//Second Time Text Field
@@ -438,53 +415,49 @@ public class SetupWindow {
 		SecondTF.setText("0");
 		SecondTF.setColumns(10);
 		SecondTF.setBounds(334, 349, 20, 20);
+		textFields.add(SecondTF);
 		frmSetupWindow.getContentPane().add(SecondTF);
 		
 		//RadioButtons
 		//Sub Time Radio Button
 		rdbtnSubTime = new JRadioButton("Sub time");
 		rdbtnSubTime.setBounds(33, 278, 76, 24);
-		rdbtnSubTime.setBackground(WindowBackground);
-		rdbtnSubTime.setForeground(Text);
+		radioButtons.add(rdbtnSubTime);
 		frmSetupWindow.getContentPane().add(rdbtnSubTime);
 		
 		//Resub Time Radio Button
 		rdbtnResubTime = new JRadioButton("Resub time");
 		rdbtnResubTime.setBounds(145, 278, 89, 24);
-		rdbtnResubTime.setBackground(WindowBackground);
-		rdbtnResubTime.setForeground(Text);
+		radioButtons.add(rdbtnResubTime);
 		frmSetupWindow.getContentPane().add(rdbtnResubTime);
 		
 		//Gifted Sub Time Radio Button
 		rdbtnGiftedSubTime = new JRadioButton("Gifted Sub time");
 		rdbtnGiftedSubTime.setBounds(257, 278, 114, 24);
-		rdbtnGiftedSubTime.setBackground(WindowBackground);
-		rdbtnGiftedSubTime.setForeground(Text);
+		radioButtons.add(rdbtnGiftedSubTime);
 		frmSetupWindow.getContentPane().add(rdbtnGiftedSubTime);
 		
 		// Host/Raid Time Radio Button
 		rdbtnHostraidTime = new JRadioButton("Host/Raid time");
 		rdbtnHostraidTime.setBounds(138, 326, 107, 24);
-		rdbtnHostraidTime.setBackground(WindowBackground);
-		rdbtnHostraidTime.setForeground(Text);
+		radioButtons.add(rdbtnHostraidTime);
 		frmSetupWindow.getContentPane().add(rdbtnHostraidTime);
 		
 		//Bits Time Radio Button
 		rdbtnBitsTime = new JRadioButton("Bits time");
 		rdbtnBitsTime.setBounds(34, 326, 75, 24);
-		rdbtnBitsTime.setBackground(WindowBackground);
-		rdbtnBitsTime.setForeground(Text);
+		radioButtons.add(rdbtnBitsTime);
 		frmSetupWindow.getContentPane().add(rdbtnBitsTime);
 		
 		//Combo Box Initilization
 		//Styles Combo Box
 		StylesCB = new JComboBox();
 		StylesCB.setModel(new DefaultComboBoxModel(getStyles()));
+		StylesCB.setSelectedItem(styles.getStyle().split("=")[1].substring(0, styles.getStyle().split("=")[1].indexOf(".")));
 		StylesCB.setBounds(48, 412, 337, 25);
-		StylesCB.setBackground(DropdownBackground);
-		StylesCB.setForeground(DropdownText);
 		frmSetupWindow.getContentPane().add(StylesCB);		
 		
+		updateStyles();
 		//Methods
 		//Listeners
 		StylesCB.addActionListener(new ActionListener() {
@@ -494,19 +467,12 @@ public class SetupWindow {
 				if(!hold.equals(currentSelection)) {
 					currentSelection = hold;
 					try {
-						styles.changeStyle("style_" + String.valueOf(StylesCB.getSelectedItem()));
+						styles.changeStyle(String.valueOf(StylesCB.getSelectedItem()) + ".style");
 					} catch (IOException e1) {
 						debug.debug("SetupWindowStylesActionListener:" + "There was an error getting styles");
 						debug.debug(e1.getStackTrace());
 					}
-					WindowBackground = styles.getWindow_background();
-					ButtonBackground = styles.getButton_background();
-					ButtonText = styles.getButton_text();
-					TextboxBackground = styles.getTextbox_background();
-					TextboxText = styles.getTextbox_text();
-					Text = styles.getText();
-					DropdownBackground = styles.getDropdown_background();
-					DropdownText = styles.getDropdown_text();
+					updateStyles();
 				}
 			}
 		});
@@ -546,7 +512,7 @@ public class SetupWindow {
 				if(save.checkTimeFormat(SubtractTimeFormatTF.getText()).equals("clear") && save.checkTimeFormat(AddTimeFormatTF.getText()).equals("clear")) {
 					save.saveSettings(BotNameTF.getText(), OAuthKeyTF.getText(), ChannelTF.getText(), AddTimeCommandTF.getText(), SubtractTimeCommandTF.getText(), AddTimeFormatTF.getText(), SubtractTimeFormatTF.getText());
 				}
-				TimeClass timeSave = new TimeClass("saveSettings");
+				TimeClass timeSave = new TimeClass();
 				if(rdbtnSubTime.isSelected())
 					timeSave.setSubTime(Integer.parseInt(SubTimeTF.getText()));
 				if(rdbtnResubTime.isSelected())
@@ -604,5 +570,43 @@ public class SetupWindow {
 	private String[] getStyles() {
 		StyleClass styles = new StyleClass();
 		return styles.getStyles();
+	}
+	
+	/**
+	 * Sets the styles for all ui elements
+	 */
+	@SuppressWarnings("static-access")
+	private void updateStyles() {
+		//Updates styles
+		styles.updateStyles();
+		
+		//Updates frame
+		frmSetupWindow.getContentPane().setBackground(styles.getWindow_background());
+		
+		//Updates buttons
+		for(int b = 0; b < buttons.size(); b++) {
+			buttons.get(b).setBackground(styles.getButton_background());
+			buttons.get(b).setForeground(styles.getButton_text());
+		}
+		
+		//Updates labels
+		for(int l = 0; l < labels.size(); l++)
+			labels.get(l).setForeground(styles.getText());
+		
+		//Updates Text Fields
+		for(int tf = 0; tf < textFields.size(); tf++) {
+			textFields.get(tf).setBackground(styles.getTextbox_background());
+			textFields.get(tf).setForeground(styles.getTextbox_text());
+		}
+		
+		//Updates Radio Buttons
+		for(int rb = 0; rb < radioButtons.size(); rb++) {
+			radioButtons.get(rb).setBackground(styles.getWindow_background());
+			radioButtons.get(rb).setForeground(styles.getText());
+		}
+		
+		//Updates combo boxes
+		StylesCB.setBackground(styles.getDropdown_background());
+		StylesCB.setForeground(styles.getDropdown_text());
 	}
 }

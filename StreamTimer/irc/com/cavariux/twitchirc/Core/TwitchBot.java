@@ -557,6 +557,7 @@ public class TwitchBot {
 				if(testLine != null)
 					line = testLine;
 				//Makes sure that the bot is still connected to chat
+				debug.debug("TwitchBotStart:" + line);
 			    if (line.toLowerCase( ).startsWith("ping")) {
 			    	LOGGER.log(Level.INFO,"> PING");
 			        LOGGER.log(Level.INFO,"< PONG " + line.substring(5));

@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 //util
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class StyleClass {
 	//Instance Varibales
@@ -47,11 +47,14 @@ public class StyleClass {
 		
 	//Methods
 	private static void readIn(File file) {
+		//Gets the active style if no style is given
 		File active;
 		if(file == null)
 			active = new File("Styles\\active");
 		else
 			active = file;
+		
+		//Reads in the info from the style text file
 		Scanner activeRead = null;
 		try {
 			activeRead = new Scanner(active);
@@ -94,6 +97,17 @@ public class StyleClass {
 	}
 	
 	//Public
+	/**
+	 * Updates styles
+	 */
+	public static void updateStyles() {
+		readIn(null);
+	}
+	
+	/**
+	 * Returns an array of the styles text files for use in a dropdown menu
+	 * @return
+	 */
 	public static String[] getStyles() {
 		File folder = new File("Styles");
 		File[] files = folder.listFiles();
@@ -101,14 +115,19 @@ public class StyleClass {
 		for(int i = 0; i < files.length; i++) {
 			String file = files[i].toString();
 			file = file.substring(file.indexOf("\\")+1);
-			if(file.startsWith("style_"))
-				stylesArray.add(file.substring(file.indexOf("_")+1));
+			if(file.endsWith(".style"))
+				stylesArray.add(file.substring(0, file.indexOf(".")));
 		}
 		String[] styles = new String[stylesArray.size()];
 		styles = stylesArray.toArray(styles);
 		return styles;
 	}
 	
+	/**
+	 * Changes current style to a diff style
+	 * @param file File name of the new style
+	 * @throws IOException
+	 */
 	public static void changeStyle(String file) throws IOException {
 		File change = new File("Styles\\" + file);
 		File active = new File("Styles\\active");
@@ -121,6 +140,7 @@ public class StyleClass {
 		write.close();
 		reader.close();
 	}
+	
 	//Getters
 	/**
 	 * @return the style

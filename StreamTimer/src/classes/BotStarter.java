@@ -1,5 +1,4 @@
 package classes;
-
 public class BotStarter extends Thread{	
 	//Instance Variables
 	//TimerBot

@@ -26,7 +26,6 @@ public class debug {
 		try {
 			debugFile.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -48,7 +47,6 @@ public class debug {
 			try {
 				check = new Scanner(debugFile);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			//If check has a new line and it is equal to true then write the bug to the file else do nothing
@@ -58,7 +56,6 @@ public class debug {
 					debugWriter.write(bug + "\n");
 					debugWriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -81,7 +78,6 @@ public class debug {
 			try {
 				check = new Scanner(debugFile);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			//If check has a new line and it is equal to true then write the bug to the file else do nothing
@@ -93,13 +89,19 @@ public class debug {
 					debugWriter.write("\n");
 					debugWriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
+	/**
+	 * Outputs the debug to console and to the debug.txt file
+	 * @param bug
+	 */
+	public static void debugConsole(String bug) {
+		System.out.println(bug);
+		debug(bug);
+	}
 	/**
 	 * Checks if debug is active
 	 */
@@ -115,7 +117,6 @@ public class debug {
 			try {
 				check = new Scanner(debugFile);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			return check.nextBoolean();
@@ -138,7 +139,6 @@ public class debug {
 			try {
 				check = new Scanner(debugFile);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			//If check has a new line and it is equal to true then write the bug to the file else do nothing
@@ -148,7 +148,6 @@ public class debug {
 					debugWriter.write("true" + "\n");
 					debugWriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
@@ -157,7 +156,6 @@ public class debug {
 					debugWriter.write("false" + "\n");
 					debugWriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

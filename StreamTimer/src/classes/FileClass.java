@@ -198,7 +198,7 @@ public class FileClass {
 			}
 		}
 		try {
-			Cryption.encrypt("This is a test k", settingsFile);
+			Cryption.encrypt("Thank you disbeA", settingsFile);
 		} catch (CryptoException e) {
 			debug.debug("FileClassSaveSettings:" + "There was an error encrypting the file.");
 			debug.debug(e.getStackTrace());
@@ -212,7 +212,7 @@ public class FileClass {
 		// Creates instance of File to create the settings.ini temp file
 		File settingsFile = null;
 		try {
-			settingsFile = Cryption.decrypt("This is a test k", new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini"));
+			settingsFile = Cryption.decrypt("Thank you disbeA", new File(System.getProperty("user.home") + "\\Documents\\DBSoftware\\StreamTimer\\settings.ini"));
 		} catch (CryptoException | IOException e1) {
 			debug.debug("FileClassSaveSettings:" + "There was an error decrypting the file.");
 			debug.debug(e1.getStackTrace());

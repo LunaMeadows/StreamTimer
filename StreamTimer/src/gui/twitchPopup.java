@@ -22,6 +22,7 @@ public class twitchPopup {
 	private JTextField botNameTF;
 	private JTextField OAuthKeyTF;
 	private JTextField TwichChannelTF;
+	private boolean open = false;
 
 	/**
 	 * Launch the application.
@@ -50,6 +51,7 @@ public class twitchPopup {
 	 * Activates the window.
 	 */
 	public void activate() {
+		open = true;
 		initialize();
 		frame.setVisible(true);
 	}
@@ -101,6 +103,7 @@ public class twitchPopup {
 		botNameTF.setColumns(10);
 		
 		OAuthKeyTF = new JTextField();
+		OAuthKeyTF.setToolTipText("Leave blank if you are using the same bot");
 		OAuthKeyTF.setColumns(10);
 		OAuthKeyTF.setBounds(114, 40, 150, 20);
 		OAuthKeyTF.setBackground(style.getTextbox_background());
@@ -138,9 +141,31 @@ public class twitchPopup {
 		//Save Button
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				info.saveSettings(botNameTF.getText(), OAuthKeyTF.getText(), TwichChannelTF.getText(), info.getAddTimeCommand(), info.getSubTimeCommand(), info.getAddTimeFormat(), info.getSubTimeFormat());
+				open = false;
+				if(OAuthKeyTF.getText() == null || OAuthKeyTF.getText().equals(""))
+					info.saveSettings(botNameTF.getText(), info.getBotOAuth(), TwichChannelTF.getText(), info.getAddTimeCommand(), info.getSubTimeCommand(), info.getAddTimeFormat(), info.getSubTimeFormat());
+				else
+					info.saveSettings(botNameTF.getText(), OAuthKeyTF.getText(), TwichChannelTF.getText(), info.getAddTimeCommand(), info.getSubTimeCommand(), info.getAddTimeFormat(), info.getSubTimeFormat());
 				frame.dispose();
 			}
 		});
+		//If exit button is pressed set open to false
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	open = false;
+		    	frame.dispose();
+		    }
+		});
+	}
+	
+	public boolean getOpen() {
+		return open;
+	}
+	
+	public void setFocus() {
+		frame.setVisible(true);
+		frame.toFront();
+		frame.requestFocus();
 	}
 }

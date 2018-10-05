@@ -52,8 +52,8 @@ public class Cryption {
         } catch (NoSuchPaddingException | NoSuchAlgorithmException
                 | InvalidKeyException | BadPaddingException
                 | IllegalBlockSizeException | IOException ex) {
-        	/*debug.debug("CryptionEncrypt:" + "There was an error encrypting or decrypting the file.");
-        	debug.debug(ex.getStackTrace());*/
+        	debug.debug("CryptionEncrypt:" + "There was an error encrypting  the file.");
+        	debug.debug(ex.getStackTrace());
             throw new CryptoException("Error encrypting/decrypting file", ex);
         }
     }
@@ -79,7 +79,7 @@ public class Cryption {
         } catch (NoSuchPaddingException | NoSuchAlgorithmException
                 | InvalidKeyException | BadPaddingException
                 | IllegalBlockSizeException | IOException ex) {
-        	debug.debug("CryptionEncrypt:" + "There was an error encrypting or decrypting the file.");
+        	debug.debug("CryptionEncrypt:" + "There was an error decrypting the file.");
         	debug.debug(ex.getStackTrace());
             throw new CryptoException("Error encrypting/decrypting file", ex);
         }

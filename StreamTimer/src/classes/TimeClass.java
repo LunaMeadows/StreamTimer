@@ -28,12 +28,6 @@ public class TimeClass {
 		readIn();
 	}
 	
-	public TimeClass(String arg) {
-		if(!arg.equals("saveSettings")) {
-			return;
-		}
-	}
-	
 	//Methods
 	//Private
 	/**
