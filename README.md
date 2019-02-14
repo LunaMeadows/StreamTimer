@@ -3,5 +3,7 @@ This is a program that can be used to put a timer on your stream for when a user
 ## Version
 Version: 1.2
 Download Link (Windows): https://sourceforge.net/projects/stream-timer/files/StreamTimer.zip/download
+
 SHA1 key: 0F1F0FEE0CD68AC97DBD3D09E4557026B39282F4
+
 Download Link (Updater): Coming soon!
