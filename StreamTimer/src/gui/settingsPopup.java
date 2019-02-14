@@ -394,6 +394,7 @@ public class settingsPopup {
 		//Updates labels
 		for(int i = 0; i < labels.size(); i++) {
 			labels.get(i).setForeground(styles.getText());
+		
 		}
 		
 		//Updates text fields
